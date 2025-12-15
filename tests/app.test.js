@@ -1,7 +1,9 @@
+process.env.TEST_MODE = 'true'; // Esto asegura que index.js devuelva JSON
 const request = require('supertest');
 const app = require('../src/index');
 const { Pool } = require('pg');
 
+// Inicializar la DB antes de los tests
 beforeAll(async () => {
   const pool = new Pool({
     user: process.env.DB_USER || 'postgres',

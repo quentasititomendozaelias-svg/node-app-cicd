@@ -28,19 +28,23 @@ const initDB = async () => {
       )
     `);
 
-    if (process.env.NODE_ENV !== 'test') {
+    if (!process.env.TEST_MODE) {
       console.log('✅ Base de datos inicializada');
     }
   } catch (err) {
-    if (process.env.NODE_ENV !== 'test') {
+    if (!process.env.TEST_MODE) {
       console.error('❌ Error al inicializar DB:', err.message);
     }
     throw err;
   }
 };
 
+if (!process.env.TEST_MODE) {
+  initDB();
+}
+
 app.get('/', (req, res) => {
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.TEST_MODE) {
     return res.status(200).json({ message: 'Bienvenido a la API' });
   }
   res.sendFile('index.html', { root: 'public' });
@@ -59,10 +63,9 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, async () => {
+if (!process.env.TEST_MODE) {
+  app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-    await initDB();
   });
 }
 
