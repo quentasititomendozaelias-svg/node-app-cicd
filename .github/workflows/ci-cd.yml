@@ -12,8 +12,11 @@ env:
 
 jobs:
   test:
-    name: Ejecutar Tests
-    runs-on: ubuntu-latest
+    name: Ejecutar tests
+    run: npm test
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgres://postgres:postgres123@localhost:5432/myapp
 
     services:
       postgres:
