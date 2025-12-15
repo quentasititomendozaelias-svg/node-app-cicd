@@ -1,9 +1,11 @@
-/*const express = require('express');
+const express = require('express');
 const { Pool } = require('pg');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(express.static('public'));
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || undefined,
@@ -14,38 +16,23 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-app.use(express.json());
-app.use(express.static('public'));
-
 const initDB = async () => {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        email VARCHAR(100) UNIQUE NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    if (!process.env.TEST_MODE) {
-      console.log('✅ Base de datos inicializada');
-    }
-  } catch (err) {
-    if (!process.env.TEST_MODE) {
-      console.error('❌ Error al inicializar DB:', err.message);
-    }
-    throw err;
-  }
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(100) NOT NULL,
+      email VARCHAR(100) UNIQUE NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
 };
 
-if (!process.env.TEST_MODE) {
-  initDB();
+if (process.env.NODE_ENV !== 'test') {
+  initDB().then(() => console.log('✅ DB inicializada')).catch(console.error);
 }
 
-// Rutas
 app.get('/', (req, res) => {
-  if (process.env.TEST_MODE === 'true') {
+  if (process.env.NODE_ENV === 'test') {
     return res.status(200).json({ message: 'Bienvenido a la API' });
   }
   res.sendFile('index.html', { root: 'public' });
@@ -64,10 +51,4 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-if (!process.env.TEST_MODE) {
-  app.listen(PORT, () => {
-    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  });
-}
-
-module.exports = app;*/
+module.exports = app;

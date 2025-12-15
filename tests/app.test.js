@@ -1,7 +1,6 @@
-process.env.TEST_MODE = 'true';
-
+process.env.NODE_ENV = 'test';
 const request = require('supertest');
-const app = require('../src/index');
+const app = require('../src/app');
 const { Pool } = require('pg');
 
 beforeAll(async () => {
