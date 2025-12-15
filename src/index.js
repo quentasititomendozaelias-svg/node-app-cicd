@@ -27,9 +27,14 @@ const initDB = async () => {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    console.log('✅ Base de datos inicializada');
+
+    if (process.env.NODE_ENV !== 'test') {
+      console.log('✅ Base de datos inicializada');
+    }
   } catch (err) {
-    console.error('❌ Error al inicializar DB:', err.message);
+    if (process.env.NODE_ENV !== 'test') {
+      console.error('❌ Error al inicializar DB:', err.message);
+    }
     throw err;
   }
 };
