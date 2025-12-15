@@ -1,4 +1,5 @@
 process.env.TEST_MODE = 'true';
+
 const request = require('supertest');
 const app = require('../src/index');
 const { Pool } = require('pg');
@@ -35,5 +36,6 @@ describe('API Tests', () => {
     const response = await request(app).get('/');
     expect(response.status).toBe(200);
     expect(response.body.message).toBeDefined();
+    expect(response.body.message).toBe('Bienvenido a la API');
   });
 });

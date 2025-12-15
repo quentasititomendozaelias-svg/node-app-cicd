@@ -43,8 +43,9 @@ if (!process.env.TEST_MODE) {
   initDB();
 }
 
+// Rutas
 app.get('/', (req, res) => {
-  if (process.env.TEST_MODE) {
+  if (process.env.TEST_MODE === 'true') {
     return res.status(200).json({ message: 'Bienvenido a la API' });
   }
   res.sendFile('index.html', { root: 'public' });
