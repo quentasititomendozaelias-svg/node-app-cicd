@@ -3,7 +3,6 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 const app = express();
-
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -25,10 +24,13 @@ const initDB = async () => {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  if (process.env.NODE_ENV !== 'test') {
+    console.log('✅ Base de datos inicializada');
+  }
 };
 
 if (process.env.NODE_ENV !== 'test') {
-  initDB().then(() => console.log('✅ DB inicializada')).catch(console.error);
+  initDB().catch(console.error);
 }
 
 app.get('/', (req, res) => {
