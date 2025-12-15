@@ -39,10 +39,6 @@ const initDB = async () => {
   }
 };
 
-if (process.env.NODE_ENV === 'test') {
-  initDB();
-}
-
 app.get('/', (req, res) => {
   if (process.env.NODE_ENV === 'test') {
     return res.status(200).json({ message: 'Bienvenido a la API' });
