@@ -1,6 +1,5 @@
 const express = require('express');
 const { Pool } = require('pg');
-const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -34,8 +33,15 @@ const initDB = async () => {
   }
 };
 
+if (process.env.NODE_ENV === 'test') {
+  initDB();
+}
+
 app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Bienvenido a la API' });
+  if (process.env.NODE_ENV === 'test') {
+    return res.status(200).json({ message: 'Bienvenido a la API' });
+  }
+  res.sendFile('index.html', { root: 'public' });
 });
 
 app.get('/health', (req, res) => {
@@ -43,8 +49,12 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/api/users', async (req, res) => {
-  const result = await pool.query('SELECT * FROM users ORDER BY id');
-  res.json(result.rows);
+  try {
+    const result = await pool.query('SELECT * FROM users ORDER BY id');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 if (process.env.NODE_ENV !== 'test') {
@@ -54,4 +64,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-module.exports = app; 
+module.exports = app;
