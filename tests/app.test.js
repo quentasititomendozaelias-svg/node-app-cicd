@@ -1,7 +1,5 @@
-process.env.NODE_ENV = 'test';
-
 const request = require('supertest');
-const app = require('../src/app'); 
+const app = require('../src/app');
 
 describe('API Tests', () => {
   test('GET /health - debe retornar status OK', async () => {

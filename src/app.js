@@ -34,10 +34,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 app.get('/', (req, res) => {
-  if (process.env.NODE_ENV === 'test') {
-    return res.status(200).json({ message: 'Bienvenido a la API' });
-  }
-  res.sendFile('index.html', { root: 'public' });
+  return res.status(200).json({ message: 'Bienvenido a la API' });
 });
 
 app.get('/health', (req, res) => {
