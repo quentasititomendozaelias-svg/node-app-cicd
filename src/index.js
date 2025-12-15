@@ -30,6 +30,7 @@ const initDB = async () => {
     console.log('✅ Base de datos inicializada');
   } catch (err) {
     console.error('❌ Error al inicializar DB:', err.message);
+    throw err;
   }
 };
 
